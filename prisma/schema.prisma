@@ -10,9 +10,63 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model Post{
-  id String @id @default(cuid()) 
-  user_id String
-  content String
-  likes Int
+model User{
+  id String @id @default(cuid())
+  username String @unique @default(cuid())
+  isUsernameSet Boolean @default(false)
+  kindeId String @unique
+  email String @unique
+  firstName String
+  lastName String
+  bio String @default("")
+  createdAt DateTime @default(now())
+
+  posts     Post[]
+  likes     Like[]
+  followers Follower[] @relation("followers")
+  following Follower[] @relation("following")
 }
+
+
+model Post {
+  id        String       @id @default(cuid())
+  content   String
+  createdAt DateTime  @default(now())
+
+  // Foreign Key
+  userId    String @default("0") //it may be to delete
+  user      User      @relation(fields: [userId], references: [id])
+
+  // Relations
+  likes     Like[]
+}
+
+model Like {
+  id        String      @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+
+  // Ensure a user can like a post only once
+  @@unique([userId, postId])
+}
+
+model Follower {
+  id          String      @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  // Relations
+  follower   User      @relation("followers", fields: [followerId], references: [id])
+  following  User      @relation("following", fields: [followingId], references: [id])
+
+  // Ensure a user can't follow the same user multiple times
+  @@unique([followerId, followingId])
+}
+
+

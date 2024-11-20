@@ -50,6 +50,7 @@ const Navbar = () => {
                     <span className="navbar-text me-3 text-white">
                         Witaj, {user?.family_name || "Użytkownik"}!
                     </span>
+                    <LogoutLink>logout</LogoutLink>
                 </div>
             </nav>
         </>
