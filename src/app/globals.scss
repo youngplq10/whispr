@@ -8,3 +8,13 @@
   left: 50%;
   transform: translateX(-50%);
 }
+.center-div{
+  line-height: 100vh;
+  height: 100vh;
+  text-align: center;
+}
+.center-div p{
+  line-height: 1.5;
+  display: inline-block;
+  vertical-align: middle;
+}

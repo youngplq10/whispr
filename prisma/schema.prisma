@@ -25,6 +25,8 @@ model User{
   likes     Like[]
   followers Follower[] @relation("followers")
   following Follower[] @relation("following")
+
+  @@unique([kindeId, username])
 }
 
 
@@ -35,7 +37,10 @@ model Post {
 
   // Foreign Key
   userId    String @default("0") //it may be to delete
-  user      User      @relation(fields: [userId], references: [id])
+  username  String @default("0")
+  user      User      @relation(fields: [userId, username], references: [kindeId, username])
+
+  
 
   // Relations
   likes     Like[]

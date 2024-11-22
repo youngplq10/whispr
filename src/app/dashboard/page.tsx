@@ -1,8 +1,11 @@
+"use server"
+
 import React from 'react'
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import Navbar from '../components/Navbar'
 import { redirect } from 'next/navigation'
 import { PrismaClient } from '@prisma/client'
+import FormNewPost from '../components/FormNewPost'
 
 
 const page = async () => {
@@ -21,6 +24,10 @@ const page = async () => {
         }
     })
 
+    if(!User){
+        redirect("/api/auth/success")
+    }
+
     if(User?.isUsernameSet === false){
         redirect("/set/username")
     }
@@ -28,6 +35,7 @@ const page = async () => {
     return(
         <>
             <Navbar />
+            <FormNewPost />
         </>
     )
 }

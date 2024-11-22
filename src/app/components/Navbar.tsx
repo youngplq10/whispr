@@ -1,16 +1,20 @@
 "use client"
 
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { LogoutLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import Whisprlogo from "../assets/whisprlogo.png"
 import Whisprlogosmall from "../assets/whisprlogosmall.png"
+import Loading from './Loading'
+import { getUserData } from '../server/actions'; // Ensure this is correctly imported
 
 const Navbar = () => {
     const { user } = useKindeBrowserClient();
     const [logoSrc, setLogoSrc] = useState(Whisprlogo);
+    
+    const [User, setUser] = useState("a")
+    const [loadingUser, setLoadingUser] = useState(true)
 
-    // Update logo source based on screen size
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth < 760) {
@@ -20,15 +24,29 @@ const Navbar = () => {
             }
         };
 
-        // Initial check and event listener for window resize
         handleResize();
         window.addEventListener('resize', handleResize);
 
-        // Cleanup event listener
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    console.log(user?.id)
+    useEffect(() => {
+        if (!user?.id) return; // Wait until user.id is available
+    
+        const getUserDataFE = async () => {
+            try {
+                const { User } = await getUserData(user.id);
+                setUser(User?.username || "unidentified")
+                setLoadingUser(false)
+            } catch (error) {
+                console.error("Failed to fetch user data:", error);
+            }
+        };
+    
+        getUserDataFE();
+    }, [user]);
+
+    if(loadingUser) return <Loading />
 
     return (
         <>
@@ -47,14 +65,11 @@ const Navbar = () => {
                 </div>
 
                 <div className="d-flex">
-                    <span className="navbar-text me-3 text-white">
-                        Witaj, {user?.family_name || "Użytkownik"}!
-                    </span>
-                    <LogoutLink>logout</LogoutLink>
+                    <a className="navbar-text me-3 text-white nav-link" href={'/profile/'+User}>Witaj, {user?.family_name || "Użytkownik"}!</a>
                 </div>
             </nav>
         </>
     );
 }
 
-export default Navbar
+export default Navbar;

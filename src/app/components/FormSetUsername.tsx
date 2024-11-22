@@ -16,7 +16,6 @@ const FormSetUsername = () => {
         }
         try {
             await setUsername(username, user?.id || "f typescript"); // Call the action with the username
-            alert("Username set successfully!");
         } catch (error) {
             console.error("Error setting username:", error);
             alert("Failed to set username. Please try again.");
