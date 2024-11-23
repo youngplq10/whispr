@@ -54,7 +54,7 @@ const Navbar = () => {
                 <div className="d-flex flex-grow-1"></div>
                 
                 <div className="navbar-center">
-                    <a className="navbar-brand" href="#">
+                    <a className="navbar-brand" href="/dashboard">
                         <Image 
                             src={logoSrc}
                             alt="Whispr"
@@ -65,7 +65,7 @@ const Navbar = () => {
                 </div>
 
                 <div className="d-flex">
-                    <a className="navbar-text me-3 text-white nav-link" href={'/profile/'+User}>Witaj, {user?.family_name || "Użytkownik"}!</a>
+                    <a className="navbar-text me-3 text-white nav-link" href={'/profile/'}>Witaj, {user?.family_name || "Użytkownik"}!</a>
                 </div>
             </nav>
         </>

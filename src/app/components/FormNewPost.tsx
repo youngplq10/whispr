@@ -5,6 +5,7 @@ import { setNewPost, getAllPosts, getUserData } from '../server/actions'; // Ens
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { PrismaClient } from '@prisma/client';
 import Loading from './Loading';
+import formatDate from './FormatDate';
 
 interface Post {
     id: string,
@@ -88,21 +89,6 @@ const FormNewPost = () => {
         }
         getAllPostsFE();
     }, []);
-
-    const formatDate = (dateString: string): string => {
-        const date = new Date(dateString);
-        // Użycie metody toLocaleDateString i toLocaleTimeString do sformatowania daty
-        const formattedDate = date.toLocaleDateString('pl-PL', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        });
-        const formattedTime = date.toLocaleTimeString('pl-PL', {
-            hour: '2-digit',
-            minute: '2-digit',
-        });
-        return `${formattedDate} ${formattedTime}`;
-    };
 
     if(loadingUser) return <Loading />
 

@@ -51,10 +51,20 @@ export async function getUserData(userid: string){
     const User = await prisma.user.findUnique({
         where: {
             kindeId: userid
+        },
+        include: {
+            followers: true,
+            following: true,
+            posts: true
         }
     })
 
     return {
-        User: User
+        User: {
+            ...User,
+            followers: User?.followers.length,
+            following: User?.following.length,
+            posts: User?.posts.length
+        }
     }
 }
