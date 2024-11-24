@@ -19,7 +19,8 @@ interface User{
     createdAt: Date,
     followers: number,
     following: number,
-    posts: number
+    posts: number,
+    profilepic: String
 }
 
 const ProfileInfo = () => {
@@ -47,15 +48,17 @@ const ProfileInfo = () => {
 
     if(loadingUser) return <Loading />
     console.log(User?.followers)
+    console.log(user?.picture)
+
     return(
         
         <>
-            <div className='container'>
+            <div className='container-fluid'>
                 <div className=''>
                     <div className='row justify-content-center mt-3'>
-                        <div className='col-6 col-xl-2 px-3 py-3 border-top border-start'>
+                        <div className='col-11 col-md-8 col-xl-6 px-3 py-3 border-top border-start border-end'>
                         <Image 
-                            src={"https://lh3.googleusercontent.com/p/AF1QipOId9RqRznxochxBh_Fk2mKX9epXHYpZgWotgeB=s680-w680-h510"}
+                            src={User.profilepic.toString() || "https://lh3.googleusercontent.com/a/ACg8ocIximtuKu7QUkx_E5R9WctexXezRz5DLWX_3KRXJhQ3lebAGTLM=s96-c"}
                             alt="Whispr"
                             width={50}
                             height={50}
@@ -63,14 +66,15 @@ const ProfileInfo = () => {
                         />
                         <span className='text-center ms-2 fs-6 fw-bold'>{User?.username}</span>
                         </div>
-
-                        <div className='col-3 col-xl-2 px-3 pt-4 pb-3 border-top border-end'>
-                            <span>Dołaczył: {formatDateWithoutHours(User?.createdAt)}</span>
+                    </div>
+                    <div className='row justify-content-center'>
+                        <div className='col-11 col-md-8 col-xl-6 px-3 pb-2 border-start border-end'>
+                            <span>Dołaczył: {User?.createdAt ? formatDateWithoutHours(User.createdAt.toString()) : "N/A"}</span>
                         </div>
                     </div>
                     <div className='row justify-content-center'>
-                        <div className='col-9 col-xl-4 border-bottom border-start border-end pt-2 pb-3'>
-                            <span className='fs-6 ms-2'>{User?.followers} obserwujących</span>
+                        <div className='col-11 col-md-8 col-xl-6 border-bottom border-start border-end pb-3'>
+                            <span className='fs-6 ms-1'>{User?.followers} obserwujących</span>
                             <span className='fs-6 ms-2'>{User?.following} obserwowanych</span>
                             <a className='btn btn-outline-primary ms-2'>Edytuj</a>
                         </div>

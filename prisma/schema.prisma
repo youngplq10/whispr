@@ -20,6 +20,7 @@ model User{
   lastName String
   bio String @default("")
   createdAt DateTime @default(now())
+  profilepic String @default("https://lh3.googleusercontent.com/a/ACg8ocIximtuKu7QUkx_E5R9WctexXezRz5DLWX_3KRXJhQ3lebAGTLM=s96-c")
 
   posts     Post[]
   likes     Like[]

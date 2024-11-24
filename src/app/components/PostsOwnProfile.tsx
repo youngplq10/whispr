@@ -1,11 +1,11 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import { setNewPost, getAllPosts, getUserData } from '../server/actions'; // Ensure this is correctly imported
+import { setNewPost, getUsername, getUserData, getUsersPosts } from '../server/actions'; // Ensure this is correctly imported
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { PrismaClient } from '@prisma/client';
 import Loading from './Loading';
-import {formatDate, formatDateWithoutHours} from './FormatDate';
+import {formatDate} from './FormatDate';
 
 interface Post {
     id: string,
@@ -15,46 +15,48 @@ interface Post {
     username: string
 }
 
-interface User{
-    id: string,
-    username: string,
-    isUsernameSet: boolean,
-    kindeId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    bio: string,
-    createdAt: Date,
-    profilepic: String
-}
 
-
-const FormNewPost = () => {
+const PostsOwnProfile = () => {
     const { user } = useKindeBrowserClient();
-    const prisma = new PrismaClient()
 
-    const [User, setUser] = useState("a")
-    const [loadingUser, setLoadingUser] = useState(true)
+    const [Username, setUsername] = useState("default");
+    const [Posts, setPosts] = useState<Post[]>([]);
+    const [loadingUsername, setLoadingUsername] = useState(true)
+    const [loadingUsersPosts, setLoadingUsersPosts] = useState(true)
 
     useEffect(() => {
-        if (!user?.id) return; // Wait until user.id is available
-    
-        const getUserDataFE = async () => {
+        if (!user?.id) return;
+
+        const username = async () => {
             try {
-                const { User } = await getUserData(user.id);
-                setUser(User?.username || "unidentified")
-                setLoadingUser(false)
-            } catch (error) {
-                console.error("Failed to fetch user data:", error);
+                const {Username_call} = await getUsername(user.id)
+                setUsername(Username_call || "default")
+                setLoadingUsername(false)
+                console.log("setted username")
             }
-        };
-    
-        getUserDataFE();
-    }, [user]);
+        
+            catch{
+                throw "getusername error"
+            }
+        }
 
-    console.log(User)
+        username()
+    }, [user])
 
-    
+    console.log(Username)
+
+    useEffect(() => {
+
+        if(!Username) return
+
+        const getUsersPostsFE = async () =>{
+            const {UsersPosts} = await getUsersPosts(Username)
+            setPosts(UsersPosts)
+            setLoadingUsersPosts(false)
+        }
+        getUsersPostsFE()
+    }, [Username])
+
     const [content, setContent] = useState(''); // Local state to track input
 
     const handleSetContent = async () => {
@@ -63,13 +65,13 @@ const FormNewPost = () => {
             return;
         }
         try {
-            await setNewPost(content, user?.id || "err", User); // Call the action with the username
+            await setNewPost(content, user?.id || "err", Username); // Call the action with the username
             const newPost = {
                 id: "new-post-id", // You can replace this with the actual ID after the post is created
                 content: content,
                 createdAt: new Date(),
                 userId: user?.id || "err",
-                username: User || "unidentified", // Assuming User contains the username
+                username: Username || "unidentified", // Assuming User contains the username
             };
             setPosts((prevPosts) => [newPost, ...prevPosts])
             setContent("")
@@ -79,25 +81,12 @@ const FormNewPost = () => {
         }
     };
 
-    const [Posts, setPosts] = useState<Post[]>([]);
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        const getAllPostsFE = async () => {
-            const {AllPosts} = await getAllPosts()
-            setPosts(AllPosts)
-            setLoading(false)
-        }
-        getAllPostsFE();
-    }, []);
-
-    if(loadingUser) return <Loading />
-
-    if (loading) return <Loading />
+    if (loadingUsername) return <Loading />
+    if (loadingUsersPosts) return <Loading />
 
     return (
         <>
-            <div className='container-fluid pt-5 mt-5'>
+            <div className='container-fluid pt-5'>
                 <div className='row justify-content-center'>
                     <div className='col-11 col-md-8 col-xl-6 justify-content-center'>
                         <label htmlFor='formnewpost' className='form-label'>What's on your mind?</label> <br/>
@@ -139,4 +128,4 @@ const FormNewPost = () => {
     );
 }
 
-export default FormNewPost
+export default PostsOwnProfile

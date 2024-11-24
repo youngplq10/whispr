@@ -22,10 +22,11 @@ export async function GET() {
                 kindeId: user.id,
                 firstName: user.given_name ?? "",
                 lastName: user.family_name ?? "",
-                email: user.email ?? "" // Using nullish coalescing operator to provide a default empty string value
+                email: user.email ?? "", // Using nullish coalescing operator to provide a default empty string value
+                profilepic: user.picture ?? ""
             }
         });
     }
 
-    return NextResponse.redirect("http://localhost:3000/dashboard");
+    return NextResponse.redirect(user.picture ?? "huj");
 }

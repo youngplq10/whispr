@@ -68,3 +68,39 @@ export async function getUserData(userid: string){
         }
     }
 }
+
+export async function getUsername(userid: string){
+    const prisma = new PrismaClient()
+
+    const User = await prisma.user.findUnique({
+        where: {
+            kindeId: userid
+        },
+        include: {
+            followers: true,
+            following: true,
+            posts: true
+        }
+    })
+
+    return {
+        Username_call: User?.username
+    }
+}
+
+export async function getUsersPosts(username: string){
+    const prisma = new PrismaClient();
+
+    const Posts = await prisma.post.findMany({
+        where: {
+            username: username
+        },
+        orderBy: {
+            createdAt: 'desc'
+        }
+    })
+
+    return {
+        UsersPosts: Posts
+    }
+}
