@@ -104,3 +104,33 @@ export async function getUsersPosts(username: string){
         UsersPosts: Posts
     }
 }
+
+export async function updateUsername(new_username: string, userid: string){
+    const prisma = new PrismaClient();
+
+    await prisma.user.update({
+        where: {
+            kindeId: userid
+        },
+        data: {
+            username: new_username
+        }
+    })
+
+    redirect("/profile")
+}
+
+export async function updateBio(new_bio: string, userid: string){
+    const prisma = new PrismaClient();
+
+    await prisma.user.update({
+        where: {
+            kindeId: userid
+        },
+        data: {
+            bio: new_bio
+        }
+    })
+
+    redirect("/profile")
+}

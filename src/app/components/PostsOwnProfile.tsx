@@ -5,7 +5,7 @@ import { setNewPost, getUsername, getUserData, getUsersPosts } from '../server/a
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { PrismaClient } from '@prisma/client';
 import Loading from './Loading';
-import {formatDate} from './FormatDate';
+import {formatDate} from '../server/FormatDate';
 
 interface Post {
     id: string,

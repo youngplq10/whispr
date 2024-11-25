@@ -5,7 +5,7 @@ import { getUserData } from '../server/actions'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import React, {useState, useEffect} from 'react'
 import Loading from './Loading'
-import {formatDateWithoutHours} from './FormatDate'
+import {formatDateWithoutHours} from '../server/FormatDate'
 
 interface User{
     id: string,
@@ -76,7 +76,7 @@ const ProfileInfo = () => {
                         <div className='col-11 col-md-8 col-xl-6 border-bottom border-start border-end pb-3'>
                             <span className='fs-6 ms-1'>{User?.followers} obserwujących</span>
                             <span className='fs-6 ms-2'>{User?.following} obserwowanych</span>
-                            <a className='btn btn-outline-primary ms-2'>Edytuj</a>
+                            <a className='btn btn-outline-primary ms-2' href='/edit/profile'>Edytuj</a>
                         </div>
                     </div>
                 </div>
