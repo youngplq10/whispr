@@ -6,6 +6,7 @@ import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { PrismaClient } from '@prisma/client';
 import Loading from './Loading';
 import {formatDate, formatDateWithoutHours} from '../server/FormatDate';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 interface Post {
     id: string,
@@ -90,6 +91,12 @@ const FormNewPost = () => {
         }
         getAllPostsFE();
     }, []);
+
+    const getMorePosts = async () => {
+        const {AllPosts} = await getAllPosts()
+        setPosts(AllPosts)
+        setLoading(false)
+    }
 
     if(loadingUser) return <Loading />
 

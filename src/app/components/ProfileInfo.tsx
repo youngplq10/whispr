@@ -73,6 +73,11 @@ const ProfileInfo = () => {
                         </div>
                     </div>
                     <div className='row justify-content-center'>
+                        <div className='col-11 col-md-8 col-xl-6 px-3 pb-2 border-start border-end'>
+                            <span>{User?.bio}</span>
+                        </div>
+                    </div>
+                    <div className='row justify-content-center'>
                         <div className='col-11 col-md-8 col-xl-6 border-bottom border-start border-end pb-3'>
                             <span className='fs-6 ms-1'>{User?.followers} obserwujących</span>
                             <span className='fs-6 ms-2'>{User?.following} obserwowanych</span>

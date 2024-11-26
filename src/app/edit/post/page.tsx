@@ -1,7 +1,6 @@
+import EditPostForm from '@/app/components/EditPostForm'
+import Navbar from '@/app/components/Navbar'
 import React from 'react'
-import Navbar from '../components/Navbar'
-import ProfileInfo from '../components/ProfileInfo'
-import PostsOwnProfile from '../components/PostsOwnProfile'
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { redirect } from 'next/navigation'
 import { PrismaClient } from '@prisma/client'
@@ -33,8 +32,7 @@ const page = async () => {
     return(
         <>
             <Navbar />
-            <ProfileInfo />
-            <PostsOwnProfile />
+            <EditPostForm />
         </>
     )
 }

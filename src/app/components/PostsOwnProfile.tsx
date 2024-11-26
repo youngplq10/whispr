@@ -108,18 +108,27 @@ const PostsOwnProfile = () => {
                 {Posts.map((post, index) => {
                     return(
                         <div key={index}>
-                            <div className='row justify-content-center mt-5'>
-                                <div className='col-11 col-md-8 col-xl-6 justify-content-center border py-2'>
-                                    <div className='d-flex justify-content-between'>
-                                        <a className='h6 fw-bold text-decoration-none' href={"/profile/"+post.username}>{post.username}</a>
-                                        <span className='text-muted'>{formatDate(post.createdAt.toString())}</span>
+                            <div className="row justify-content-center mt-5">
+                                <div className="col-11 col-md-8 col-xl-6 justify-content-center border py-2">
+                                    <div className="d-flex justify-content-between">
+                                        <a className="h6 fw-bold text-decoration-none" href={"/profile/" + post.username}>
+                                            {post.username}
+                                        </a>
+                                        
+                                        <div className="d-flex align-items-center">
+                                            <span className="text-muted me-3">{formatDate(post.createdAt.toString())}</span>
+                                            <a href={'/edit/post?postid=' + post.id} className="btn btn-primary btn-sm">
+                                                Edit
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div className='fw-light py-1'>
+                                    <div className="fw-light py-1">
                                         {post.content}
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     )
                 })}
 

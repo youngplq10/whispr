@@ -1,8 +1,8 @@
 "use server"
 
 import React from 'react'
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import Navbar from '../components/Navbar'
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { redirect } from 'next/navigation'
 import { PrismaClient } from '@prisma/client'
 import FormNewPost from '../components/FormNewPost'

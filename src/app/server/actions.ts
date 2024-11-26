@@ -134,3 +134,32 @@ export async function updateBio(new_bio: string, userid: string){
 
     redirect("/profile")
 }
+
+export async function getPostData(postId: string){
+    const prisma = new PrismaClient()
+
+    const Post = await prisma.post.findUnique({
+        where: {
+            id: postId
+        }
+    })
+
+    return {
+        PostData: Post
+    }
+}
+
+export async function updatePost(postId: string, new_content: string){
+    const prisma = new PrismaClient()
+
+    await prisma.post.update({
+        where: {
+            id: postId
+        },
+        data: {
+            content: new_content
+        }
+    })
+
+    redirect('/profile')
+}
