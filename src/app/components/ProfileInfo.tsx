@@ -58,7 +58,7 @@ const ProfileInfo = () => {
                     <div className='row justify-content-center mt-3'>
                         <div className='col-11 col-md-8 col-xl-6 px-3 py-3 border-top border-start border-end'>
                         <Image 
-                            src={User.profilepic.toString() || "https://lh3.googleusercontent.com/a/ACg8ocIximtuKu7QUkx_E5R9WctexXezRz5DLWX_3KRXJhQ3lebAGTLM=s96-c"}
+                            src={User?.profilepic.toString() || "https://lh3.googleusercontent.com/a/ACg8ocIximtuKu7QUkx_E5R9WctexXezRz5DLWX_3KRXJhQ3lebAGTLM=s96-c"}
                             alt="Whispr"
                             width={50}
                             height={50}
@@ -79,8 +79,8 @@ const ProfileInfo = () => {
                     </div>
                     <div className='row justify-content-center'>
                         <div className='col-11 col-md-8 col-xl-6 border-bottom border-start border-end pb-3'>
-                            <span className='fs-6 ms-1'>{User?.followers} obserwujących</span>
-                            <span className='fs-6 ms-2'>{User?.following} obserwowanych</span>
+                            <span className='fs-6 ms-1'>{User?.following} obserwujących</span>
+                            <span className='fs-6 ms-2'>{User?.followers} obserwowanych</span>
                             <a className='btn btn-outline-primary ms-2' href='/edit/profile'>Edytuj</a>
                         </div>
                     </div>

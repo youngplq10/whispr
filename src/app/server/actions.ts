@@ -2,6 +2,7 @@
 
 import { PrismaClient } from '@prisma/client';
 import { redirect } from 'next/navigation';
+import { use } from 'react';
 
 export async function setUsername(username: string, userid: string){
     const prisma = new PrismaClient()
@@ -51,6 +52,30 @@ export async function getUserData(userid: string){
     const User = await prisma.user.findUnique({
         where: {
             kindeId: userid
+        },
+        include: {
+            followers: true,
+            following: true,
+            posts: true
+        }
+    })
+
+    return {
+        User: {
+            ...User,
+            followers: User?.followers.length,
+            following: User?.following.length,
+            posts: User?.posts.length
+        }
+    }
+}
+
+export async function getUserDataByUsername(username: string){
+    const prisma = new PrismaClient()
+
+    const User = await prisma.user.findUnique({
+        where: {
+            username: username
         },
         include: {
             followers: true,
@@ -162,4 +187,92 @@ export async function updatePost(postId: string, new_content: string){
     })
 
     redirect('/profile')
+}
+export async function checkIfIsFollowing(authenticatedUserId: string, targetUsername: string) {
+    const prisma = new PrismaClient()
+
+    const targetUser = await prisma.user.findUnique({
+      where: { username: targetUsername },
+    });
+  
+    if (!targetUser) {
+      throw new Error("Target user not found");
+    }
+  
+    const following = await prisma.follower.findFirst({
+      where: {
+        followerId: authenticatedUserId,
+        followingId: targetUser.id,
+      },
+    });
+  
+    return {
+        isFollowing: Boolean(following)
+    }
+  }
+
+export async function followUser(followerId: string, followingUsername: string){
+    const prisma = new PrismaClient()
+
+    const followingUser = await prisma.user.findUnique({
+        where: {
+            username: followingUsername
+        }
+    })
+
+    if(!followingUser) {
+        throw "f followuser"
+    }
+
+    await prisma.follower.create({
+        data: {
+            followerId: followerId,
+            followingId: followingUser.id
+        }
+    })
+}
+
+export async function unfollowUser(followerId: string, followingUsername: string){
+    const prisma = new PrismaClient()
+
+    const followingUser = await prisma.user.findUnique({
+        where: {
+            username: followingUsername
+        }
+    })
+
+    if(!followingUser) {
+        throw "f followuser"
+    }
+
+    await prisma.follower.deleteMany({
+        where: {
+            followerId: followerId,
+            followingId: followingUser.id
+        }
+    })
+}
+
+export async function getFollowing(userId: string){
+    const prisma = new PrismaClient()
+
+    const following = await prisma.follower.findMany({
+        where: {
+            followerId: userId
+        },
+        select: {
+            follower: {
+              select: {
+                id: true,
+                username: true,
+                profilepic: true,
+                bio: true,
+            },
+        },
+    }
+    })
+
+    return {
+        following: following
+    }
 }
