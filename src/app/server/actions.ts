@@ -2,10 +2,10 @@
 
 import { PrismaClient } from '@prisma/client';
 import { redirect } from 'next/navigation';
-import { use } from 'react';
+
+const prisma = new PrismaClient()
 
 export async function setUsername(username: string, userid: string){
-    const prisma = new PrismaClient()
 
     await prisma.user.update({
         where: {
@@ -21,7 +21,6 @@ export async function setUsername(username: string, userid: string){
 }
 
 export async function setNewPost(contentt: string, userid: string, usernamee: string){
-    const prisma = new PrismaClient();
 
     await prisma.post.create({
         data: {
@@ -33,7 +32,6 @@ export async function setNewPost(contentt: string, userid: string, usernamee: st
 }
 
 export async function getAllPosts(){
-    const prisma = new PrismaClient();
 
     const Posts = await prisma.post.findMany({
         orderBy: {
@@ -47,7 +45,6 @@ export async function getAllPosts(){
 }
 
 export async function getUserData(userid: string){
-    const prisma = new PrismaClient()
 
     const User = await prisma.user.findUnique({
         where: {
@@ -71,7 +68,6 @@ export async function getUserData(userid: string){
 }
 
 export async function getUserDataByUsername(username: string){
-    const prisma = new PrismaClient()
 
     const User = await prisma.user.findUnique({
         where: {
@@ -95,7 +91,6 @@ export async function getUserDataByUsername(username: string){
 }
 
 export async function getUsername(userid: string){
-    const prisma = new PrismaClient()
 
     const User = await prisma.user.findUnique({
         where: {
@@ -114,7 +109,6 @@ export async function getUsername(userid: string){
 }
 
 export async function getUsersPosts(username: string){
-    const prisma = new PrismaClient();
 
     const Posts = await prisma.post.findMany({
         where: {
@@ -131,7 +125,6 @@ export async function getUsersPosts(username: string){
 }
 
 export async function updateUsername(new_username: string, userid: string){
-    const prisma = new PrismaClient();
 
     await prisma.user.update({
         where: {
@@ -146,7 +139,6 @@ export async function updateUsername(new_username: string, userid: string){
 }
 
 export async function updateBio(new_bio: string, userid: string){
-    const prisma = new PrismaClient();
 
     await prisma.user.update({
         where: {
@@ -161,7 +153,6 @@ export async function updateBio(new_bio: string, userid: string){
 }
 
 export async function getPostData(postId: string){
-    const prisma = new PrismaClient()
 
     const Post = await prisma.post.findUnique({
         where: {
@@ -175,7 +166,6 @@ export async function getPostData(postId: string){
 }
 
 export async function updatePost(postId: string, new_content: string){
-    const prisma = new PrismaClient()
 
     await prisma.post.update({
         where: {
@@ -189,7 +179,6 @@ export async function updatePost(postId: string, new_content: string){
     redirect('/profile')
 }
 export async function checkIfIsFollowing(authenticatedUserId: string, targetUsername: string) {
-    const prisma = new PrismaClient()
 
     const targetUser = await prisma.user.findUnique({
       where: { username: targetUsername },
@@ -212,7 +201,6 @@ export async function checkIfIsFollowing(authenticatedUserId: string, targetUser
   }
 
 export async function followUser(followerId: string, followingUsername: string){
-    const prisma = new PrismaClient()
 
     const followingUser = await prisma.user.findUnique({
         where: {
@@ -233,7 +221,6 @@ export async function followUser(followerId: string, followingUsername: string){
 }
 
 export async function unfollowUser(followerId: string, followingUsername: string){
-    const prisma = new PrismaClient()
 
     const followingUser = await prisma.user.findUnique({
         where: {
@@ -254,7 +241,6 @@ export async function unfollowUser(followerId: string, followingUsername: string
 }
 
 export async function getFollowing(userId: string){
-    const prisma = new PrismaClient()
 
     const following = await prisma.follower.findMany({
         where: {

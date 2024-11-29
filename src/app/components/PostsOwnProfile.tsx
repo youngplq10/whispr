@@ -1,9 +1,8 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import { setNewPost, getUsername, getUserData, getUsersPosts } from '../server/actions'; // Ensure this is correctly imported
+import { setNewPost, getUsername, getUsersPosts } from '../server/actions';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { PrismaClient } from '@prisma/client';
 import Loading from './Loading';
 import {formatDate} from '../server/FormatDate';
 
@@ -15,74 +14,70 @@ interface Post {
     username: string
 }
 
-
 const PostsOwnProfile = () => {
     const { user } = useKindeBrowserClient();
 
     const [Username, setUsername] = useState("default");
     const [Posts, setPosts] = useState<Post[]>([]);
-    const [loadingUsername, setLoadingUsername] = useState(true)
-    const [loadingUsersPosts, setLoadingUsersPosts] = useState(true)
+    const [loadingUsername, setLoadingUsername] = useState(true);
+    const [loadingUsersPosts, setLoadingUsersPosts] = useState(true);
+    const [content, setContent] = useState('');
 
     useEffect(() => {
         if (!user?.id) return;
 
         const username = async () => {
             try {
-                const {Username_call} = await getUsername(user.id)
-                setUsername(Username_call || "default")
-                setLoadingUsername(false)
-                console.log("setted username")
+                const {Username_call} = await getUsername(user.id);
+                setUsername(Username_call || "default");
+                setLoadingUsername(false);
+                console.log("setted username");
             }
         
             catch{
-                throw "getusername error"
+                throw "getusername error";
             }
         }
 
-        username()
-    }, [user])
-
-    console.log(Username)
+        username();
+    }, [user]);
 
     useEffect(() => {
 
-        if(!Username) return
+        if(!Username) return;
 
         const getUsersPostsFE = async () =>{
-            const {UsersPosts} = await getUsersPosts(Username)
-            setPosts(UsersPosts)
-            setLoadingUsersPosts(false)
+            const {UsersPosts} = await getUsersPosts(Username);
+            setPosts(UsersPosts);
+            setLoadingUsersPosts(false);
         }
-        getUsersPostsFE()
-    }, [Username])
-
-    const [content, setContent] = useState(''); // Local state to track input
+        getUsersPostsFE();
+    }, [Username]);
 
     const handleSetContent = async () => {
         if (!content.trim()) {
-            alert("Post can't be empty!"); // Simple validation
+            alert("Post can't be empty!");
             return;
         }
         try {
-            await setNewPost(content, user?.id || "err", Username); // Call the action with the username
+            await setNewPost(content, user?.id || "err", Username);
             const newPost = {
-                id: "new-post-id", // You can replace this with the actual ID after the post is created
+                id: "new-post-id",
                 content: content,
                 createdAt: new Date(),
                 userId: user?.id || "err",
-                username: Username || "unidentified", // Assuming User contains the username
+                username: Username || "unidentified",
             };
-            setPosts((prevPosts) => [newPost, ...prevPosts])
-            setContent("")
+            setPosts((prevPosts) => [newPost, ...prevPosts]);
+            setContent("");
         } catch (error) {
             console.error("Error setting username:", error);
             alert("Failed to set username. Please try again.");
         }
     };
 
-    if (loadingUsername) return <Loading />
-    if (loadingUsersPosts) return <Loading />
+    if (loadingUsername) return <Loading />;
+    if (loadingUsersPosts) return <Loading />;
 
     return (
         <>
@@ -95,11 +90,11 @@ const PostsOwnProfile = () => {
                             id='formnewpost' 
                             className='form-control' 
                             value={content}
-                            onChange={(e) => setContent(e.target.value)} // Update state on input change
+                            onChange={(e) => setContent(e.target.value)}
                         /> 
                         <button 
                             className='btn btn-primary py-1 px-3 mt-2' 
-                            onClick={handleSetContent} // Call handler on click
+                            onClick={handleSetContent}
                         >Share</button>            
                     </div>
                 </div>
@@ -137,4 +132,4 @@ const PostsOwnProfile = () => {
     );
 }
 
-export default PostsOwnProfile
+export default PostsOwnProfile;

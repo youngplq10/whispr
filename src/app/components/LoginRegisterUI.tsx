@@ -1,7 +1,7 @@
 "use client"
 
-import { LoginLink, RegisterLink } from '@kinde-oss/kinde-auth-nextjs'
-import React from 'react'
+import { LoginLink, RegisterLink } from '@kinde-oss/kinde-auth-nextjs';
+import React from 'react';
 
 const LoginRegisterUI = () => {
 
@@ -19,7 +19,7 @@ const LoginRegisterUI = () => {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-export default LoginRegisterUI
+export default LoginRegisterUI;

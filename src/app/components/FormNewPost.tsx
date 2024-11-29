@@ -1,12 +1,10 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import { setNewPost, getAllPosts, getUserData } from '../server/actions'; // Ensure this is correctly imported
+import { setNewPost, getAllPosts, getUserData } from '@/app/server/actions';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { PrismaClient } from '@prisma/client';
-import Loading from './Loading';
-import {formatDate, formatDateWithoutHours} from '../server/FormatDate';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import Loading from '@/app/components/Loading';
+import { formatDate } from '@/app/server/FormatDate';
 
 interface Post {
     id: string,
@@ -16,35 +14,20 @@ interface Post {
     username: string
 }
 
-interface User{
-    id: string,
-    username: string,
-    isUsernameSet: boolean,
-    kindeId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    bio: string,
-    createdAt: Date,
-    profilepic: String
-}
-
-
 const FormNewPost = () => {
     const { user } = useKindeBrowserClient();
-    const prisma = new PrismaClient()
 
-    const [User, setUser] = useState("a")
-    const [loadingUser, setLoadingUser] = useState(true)
+    const [User, setUser] = useState("a");
+    const [loadingUser, setLoadingUser] = useState(true);
 
     useEffect(() => {
-        if (!user?.id) return; // Wait until user.id is available
+        if (!user?.id) return;
     
         const getUserDataFE = async () => {
             try {
                 const { User } = await getUserData(user.id);
-                setUser(User?.username || "unidentified")
-                setLoadingUser(false)
+                setUser(User?.username || "unidentified");
+                setLoadingUser(false);
             } catch (error) {
                 console.error("Failed to fetch user data:", error);
             }
@@ -52,28 +35,25 @@ const FormNewPost = () => {
     
         getUserDataFE();
     }, [user]);
-
-    console.log(User)
-
     
-    const [content, setContent] = useState(''); // Local state to track input
+    const [content, setContent] = useState('');
 
     const handleSetContent = async () => {
         if (!content.trim()) {
-            alert("Post can't be empty!"); // Simple validation
+            alert("Post can't be empty!");
             return;
         }
         try {
-            await setNewPost(content, user?.id || "err", User); // Call the action with the username
+            await setNewPost(content, user?.id || "err", User);
             const newPost = {
-                id: "new-post-id", // You can replace this with the actual ID after the post is created
+                id: "new-post-id",
                 content: content,
                 createdAt: new Date(),
                 userId: user?.id || "err",
-                username: User || "unidentified", // Assuming User contains the username
+                username: User || "unidentified",
             };
-            setPosts((prevPosts) => [newPost, ...prevPosts])
-            setContent("")
+            setPosts((prevPosts) => [newPost, ...prevPosts]);
+            setContent("");
         } catch (error) {
             console.error("Error setting username:", error);
             alert("Failed to set username. Please try again.");
@@ -81,26 +61,20 @@ const FormNewPost = () => {
     };
 
     const [Posts, setPosts] = useState<Post[]>([]);
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const getAllPostsFE = async () => {
-            const {AllPosts} = await getAllPosts()
-            setPosts(AllPosts)
-            setLoading(false)
+            const {AllPosts} = await getAllPosts();
+            setPosts(AllPosts);
+            setLoading(false);
         }
         getAllPostsFE();
     }, []);
 
-    const getMorePosts = async () => {
-        const {AllPosts} = await getAllPosts()
-        setPosts(AllPosts)
-        setLoading(false)
-    }
+    if(loadingUser) return <Loading />;
 
-    if(loadingUser) return <Loading />
-
-    if (loading) return <Loading />
+    if (loading) return <Loading />;
 
     return (
         <>
@@ -146,4 +120,4 @@ const FormNewPost = () => {
     );
 }
 
-export default FormNewPost
+export default FormNewPost;

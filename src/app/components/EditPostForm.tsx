@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { getPostData, updatePost } from '../server/actions'
-import Loading from './Loading'
+import { getPostData, updatePost } from '@/app/server/actions'
+import Loading from '@/app/components/Loading'
 import { redirect, useSearchParams } from 'next/navigation'
 
 const EditPostForm = () => {

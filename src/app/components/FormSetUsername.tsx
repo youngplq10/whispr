@@ -1,21 +1,21 @@
 "use client"
 
 import React, { useState } from 'react';
-import { setUsername } from '../server/actions'; // Ensure this is correctly imported
+import { setUsername } from '@/app/server/actions';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 
 const FormSetUsername = () => {
     const { user } = useKindeBrowserClient();
     
-    const [username, setUsernameState] = useState(''); // Local state to track input
+    const [username, setUsernameState] = useState('');
 
     const handleSetUsername = async () => {
         if (!username.trim()) {
-            alert("Username cannot be empty!"); // Simple validation
+            alert("Username cannot be empty!");
             return;
         }
         try {
-            await setUsername(username, user?.id || "f typescript"); // Call the action with the username
+            await setUsername(username, user?.id || "f typescript");
         } catch (error) {
             console.error("Error setting username:", error);
             alert("Failed to set username. Please try again.");
@@ -33,12 +33,12 @@ const FormSetUsername = () => {
                             id='formsetusername' 
                             className='form-control' 
                             value={username}
-                            onChange={(e) => setUsernameState(e.target.value)} // Update state on input change
+                            onChange={(e) => setUsernameState(e.target.value)}
                         /> 
                         <br/>
                         <button 
                             className='btn btn-primary py-1 px-5' 
-                            onClick={handleSetUsername} // Call handler on click
+                            onClick={handleSetUsername}
                         >
                             Set
                         </button>

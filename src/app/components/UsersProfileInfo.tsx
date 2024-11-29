@@ -1,10 +1,11 @@
 "use client";
+
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import React, { useEffect, useState } from "react";
 import { redirect, useParams } from "next/navigation";
 import { getUserData, getUserDataByUsername, checkIfIsFollowing, unfollowUser, followUser } from "../server/actions";
-import Loading from "./Loading";
-import { formatDateWithoutHours } from "../server/FormatDate";
+import Loading from "@/app/components/Loading";
+import { formatDateWithoutHours } from "@/app/server/FormatDate";
 import Image from "next/image";
 
 interface User {
@@ -31,11 +32,11 @@ const UsersProfileInfo = () => {
 
     const [User, setUser] = useState<User | null>(null);
 
-    const [following, setFollowing] = useState(true)
-    const [loadingFollowing, setLoadingFollowing] = useState(true)
+    const [following, setFollowing] = useState(true);
+    const [loadingFollowing, setLoadingFollowing] = useState(true);
 
-    const [howManyFollowers, setHowManyFollowers] = useState(0)
-    const [howManyFollowing, setHowManyFollowing] = useState(0)
+    const [howManyFollowers, setHowManyFollowers] = useState(0);
+    const [howManyFollowing, setHowManyFollowing] = useState(0);
 
     const params = useParams();
     const profileusername = params.profilename;
@@ -58,7 +59,7 @@ const UsersProfileInfo = () => {
 
     useEffect(() => {
         if (me && profileusername === me.username) {
-            redirect("/profile")
+            redirect("/profile");
         }
     }, [me, profileusername]);
 
@@ -67,8 +68,8 @@ const UsersProfileInfo = () => {
             try {
                 const { User } = await getUserDataByUsername(profileusername.toString());
                 setUser(User);
-                setHowManyFollowers(User.followers || 0)
-                setHowManyFollowing(User.following || 0)
+                setHowManyFollowers(User.followers || 0);
+                setHowManyFollowing(User.following || 0);
             } catch (error) {
                 console.error("Error in getUserDataByUsernameFE:", error);
             }
@@ -78,32 +79,32 @@ const UsersProfileInfo = () => {
     }, [profileusername]);
 
     useEffect(() => {
-        if(!me || !User) return
+        if(!me || !User) return;
 
         const checkIfIsFollowingFE = async () => {
             try {
-                const { isFollowing } = await checkIfIsFollowing(me?.id, User?.username)
-                setFollowing(isFollowing)
-                setLoadingFollowing(false)
+                const { isFollowing } = await checkIfIsFollowing(me?.id, User?.username);
+                setFollowing(isFollowing);
+                setLoadingFollowing(false);
             }
             catch {
-                throw "f checkifisfollowingfe"
+                throw "f checkifisfollowingfe";
             }
         }
 
-        checkIfIsFollowingFE()
-    }, [me, User])
+        checkIfIsFollowingFE();
+    }, [me, User]);
 
     const handleFollowing = async () => {
-        if (!me || !User) return
+        if (!me || !User) return;
 
-        if (following) {unfollowUser(me?.id, User?.username); setFollowing(false); setHowManyFollowing((prev) => prev-1)}
+        if (following) {unfollowUser(me?.id, User?.username); setFollowing(false); setHowManyFollowing((prev) => prev-1);}
 
-        else if (!following) {followUser(me.id, User.username); setFollowing(true); setHowManyFollowing((prev) => prev+1)}
+        else if (!following) {followUser(me.id, User.username); setFollowing(true); setHowManyFollowing((prev) => prev+1);}
     }
 
-    if (loadingUsername) return <Loading />
-    if (loadingFollowing) return <Loading />
+    if (loadingUsername) return <Loading />;
+    if (loadingFollowing) return <Loading />;
 
     return (
         <>

@@ -1,11 +1,11 @@
 "use client"
-import Image from 'next/image'
-import Whisprlogo from "../assets/whisprlogo.png"
-import { getUserData } from '../server/actions'
-import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import React, {useState, useEffect} from 'react'
-import Loading from './Loading'
-import {formatDateWithoutHours} from '../server/FormatDate'
+
+import Image from 'next/image';
+import { getUserData } from '@/app/server/actions';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
+import React, {useState, useEffect} from 'react';
+import Loading from '@/app/components/Loading';
+import {formatDateWithoutHours} from '@/app/server/FormatDate';
 
 interface User{
     id: string,
@@ -26,18 +26,18 @@ interface User{
 const ProfileInfo = () => {
     const { user } = useKindeBrowserClient();
 
-    const [User, setUser] = useState<User>()
-    const [loadingUser, setLoadingUser] = useState(true)
+    const [User, setUser] = useState<User>();
+    const [loadingUser, setLoadingUser] = useState(true);
 
     useEffect(() => {
-        if (!user?.id) return; // Wait until user.id is available
+        if (!user?.id) return;
     
         const getUserDataFE = async () => {
             try {
                 const { User } = await getUserData(user.id);
-                if(!User) return 
-                setUser(User)
-                setLoadingUser(false)
+                if(!User) return;
+                setUser(User);
+                setLoadingUser(false);
             } catch (error) {
                 console.error("Failed to fetch user data:", error);
             }
@@ -46,12 +46,9 @@ const ProfileInfo = () => {
         getUserDataFE();
     }, [user]);
 
-    if(loadingUser) return <Loading />
-    console.log(User?.followers)
-    console.log(user?.picture)
+    if(loadingUser) return <Loading />;
 
     return(
-        
         <>
             <div className='container-fluid'>
                 <div className=''>
@@ -87,7 +84,7 @@ const ProfileInfo = () => {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-export default ProfileInfo
+export default ProfileInfo;

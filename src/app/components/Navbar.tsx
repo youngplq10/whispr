@@ -1,19 +1,35 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
-import { LogoutLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import Whisprlogo from "../assets/whisprlogo.png"
-import Whisprlogosmall from "../assets/whisprlogosmall.png"
-import Loading from './Loading'
-import { getUserData } from '../server/actions'; // Ensure this is correctly imported
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
+import Whisprlogo from "@/app/assets/whisprlogo.png";
+import Whisprlogosmall from "@/app/assets/whisprlogosmall.png";
+import Loading from '@/app/components/Loading';
+import { getUserData } from '@/app/server/actions';
+
+interface User {
+    id: string,
+    username: string,
+    isUsernameSet: boolean,
+    kindeId: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    bio: string,
+    createdAt: Date,
+    followers: number,
+    following: number,
+    posts: number,
+    profilepic: String,
+}
 
 const Navbar = () => {
     const { user } = useKindeBrowserClient();
     const [logoSrc, setLogoSrc] = useState(Whisprlogo);
     
-    const [User, setUser] = useState("a")
-    const [loadingUser, setLoadingUser] = useState(true)
+    const [User, setUser] = useState<User>();
+    const [loadingUser, setLoadingUser] = useState(true);
 
     useEffect(() => {
         const handleResize = () => {
@@ -31,13 +47,13 @@ const Navbar = () => {
     }, []);
 
     useEffect(() => {
-        if (!user?.id) return; // Wait until user.id is available
+        if (!user?.id) return;
     
         const getUserDataFE = async () => {
             try {
                 const { User } = await getUserData(user.id);
-                setUser(User?.username || "unidentified")
-                setLoadingUser(false)
+                setUser(User);
+                setLoadingUser(false);
             } catch (error) {
                 console.error("Failed to fetch user data:", error);
             }
@@ -46,7 +62,7 @@ const Navbar = () => {
         getUserDataFE();
     }, [user]);
 
-    if(loadingUser) return <Loading />
+    if(loadingUser) return <Loading />;
 
     return (
         <>
@@ -65,7 +81,7 @@ const Navbar = () => {
                 </div>
 
                 <div className="d-flex">
-                    <a className="navbar-text me-3 text-white nav-link" href={'/profile/'}>Witaj, {user?.family_name || "Użytkownik"}!</a>
+                    <a className="navbar-text me-3 text-white nav-link" href={'/profile/'}>Witaj, {User?.username || "Użytkownik"}!</a>
                 </div>
             </nav>
         </>

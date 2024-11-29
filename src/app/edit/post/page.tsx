@@ -1,40 +1,19 @@
-import EditPostForm from '@/app/components/EditPostForm'
-import Navbar from '@/app/components/Navbar'
-import React from 'react'
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
-import { redirect } from 'next/navigation'
-import { PrismaClient } from '@prisma/client'
+"use server"
+
+import EditPostForm from '@/app/components/EditPostForm';
+import Navbar from '@/app/components/Navbar';
+import React from 'react';
+import checkIfIsLoggedOrHasUsername from "@/app/server/checkIfIsLoggedOrHasUsername";
 
 const page = async () => {
-    const prisma = new PrismaClient();
-    const { isAuthenticated, getUser } = getKindeServerSession()
-    const user = getUser()
-    const isLoggedIn = await isAuthenticated()
-
-    if(!isLoggedIn){
-        redirect("/")
-    }
-
-    const User = await prisma.user.findUnique({
-        where: {
-            kindeId: (await user).id
-        }
-    })
-
-    if(!User){
-        redirect("/api/auth/success")
-    }
-
-    if(User?.isUsernameSet === false){
-        redirect("/set/username")
-    }
+    checkIfIsLoggedOrHasUsername()
 
     return(
         <>
             <Navbar />
             <EditPostForm />
         </>
-    )
+    );
 }
 
-export default page
+export default page;

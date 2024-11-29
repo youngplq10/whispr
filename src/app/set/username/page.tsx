@@ -1,35 +1,17 @@
-import React from 'react'
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
-import { redirect } from 'next/navigation'
-import { PrismaClient } from '@prisma/client'
-import FormSetUsername from '@/app/components/FormSetUsername'
+"use server"
+
+import React from 'react';
+import FormSetUsername from '@/app/components/FormSetUsername';
+import checkIfIsLoggedOrHasUsername from "@/app/server/checkIfIsLoggedOrHasUsername";
 
 const page = async () => {
-    const prisma = new PrismaClient();
-
-    const { isAuthenticated, getUser } = getKindeServerSession()
-    const user = getUser();
-    const isLoggedIn = await isAuthenticated()
-
-    if(!isLoggedIn){
-        redirect("/")
-    }
-    
-    const User = await prisma.user.findUnique({
-        where: {
-            kindeId: (await user).id
-        }
-    })
-
-    if (User?.isUsernameSet === true){
-        redirect("/dashboard")
-    }
+    checkIfIsLoggedOrHasUsername()
 
     return(
         <>
             <FormSetUsername />
         </>
-    )
+    );
 }
 
-export default page
+export default page;

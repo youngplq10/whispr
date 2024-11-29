@@ -1,31 +1,31 @@
 "use client"
 
 import { useParams } from 'next/navigation';
-import React, { use, useEffect, useState } from 'react'
-import { getFollowing, getUserDataByUsername } from '../server/actions';
-import Loading from './Loading';
+import React, {  useEffect, useState } from 'react'
+import { getFollowing, getUserDataByUsername } from '@/app/server/actions';
+import Loading from '@/app/components/Loading';
 
 interface User {
-    id: string;
-    username: string;
-    isUsernameSet: boolean;
-    kindeId: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    bio: string;
-    createdAt: Date;
-    followers: number;
-    following: number;
-    posts: number;
-    profilepic: String;
+    id: string,
+    username: string,
+    isUsernameSet: boolean,
+    kindeId: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    bio: string,
+    createdAt: Date,
+    followers: number,
+    following: number,
+    posts: number,
+    profilepic: String,
 }
 
 interface Following {
     id: string,
     username: string,
     profilepic: string,
-    bio: string
+    bio: string,
 }
 
 const FollowingListing = () => {
@@ -33,34 +33,32 @@ const FollowingListing = () => {
     const profileusername = params.profilename;
 
     const [User, setUser] = useState<User | null>(null);
-    const [followingListing, setFollowingListing] = useState<Following[]>([])
-    const [loadingFollowingListing, setLoadingFollowingListing] = useState(true)
+    const [followingListing, setFollowingListing] = useState<Following[]>([]);
+    const [loadingFollowingListing, setLoadingFollowingListing] = useState(true);
 
     useEffect(() => {
         const getUserDataFE = async () => {
             const { User } = await getUserDataByUsername(profileusername.toString());
-            setUser(User)
-            console.log(User)
+            setUser(User);
+            console.log(User);
         }
 
-        getUserDataFE()
-    }, [profileusername])
+        getUserDataFE();
+    }, [profileusername]);
 
     useEffect(() => {
-        if (!User) return
+        if (!User) return;
 
         const getFollowingFE = async () => {
-            const { following } = await getFollowing(User.id)
-            setFollowingListing(following)
-            setLoadingFollowingListing(false)
+            const { following } = await getFollowing(User.id);
+            setFollowingListing(following);
+            setLoadingFollowingListing(false);
         }
 
-        getFollowingFE()
-    }, [User])
+        getFollowingFE();
+    }, [User]);
 
-    if (loadingFollowingListing) return <Loading />
-
-    console.log(followingListing)
+    if (loadingFollowingListing) return <Loading />;
 
     return(
         <>  
@@ -78,7 +76,7 @@ const FollowingListing = () => {
                 })}
             </div>
         </>
-    )
+    );
 }
 
-export default FollowingListing
+export default FollowingListing;

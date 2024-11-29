@@ -2,65 +2,62 @@
 
 import React, { useEffect, useState } from 'react'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { PrismaClient } from '@prisma/client'
-import { getUserData, updateUsername, updateBio } from '../server/actions'
-import Loading from './Loading'
+import { getUserData, updateUsername, updateBio } from '@/app/server/actions'
+import Loading from '@/app/components/Loading'
 
 const EditProfileForm = () => {
-    const { user } = useKindeBrowserClient()
+    const { user } = useKindeBrowserClient();
 
-    const [Username, setUsername] = useState("")
-    const [Bio, setBio] = useState("")
-    const [loadingUserData, setLoadingUserData] = useState(true)
+    const [loadingUserData, setLoadingUserData] = useState(true);
 
-    const [usernameContent, setUsernameContent] = useState('')
-    const [bioContent, setBioContent] = useState('')
+    const [usernameContent, setUsernameContent] = useState('');
+    const [bioContent, setBioContent] = useState('');
 
     useEffect(() => {
         if (!user?.id) return;
 
         const getUserDataFE = async () => {
             try {
-                const User = await getUserData(user.id)
-                setUsernameContent(User.User.username || "")
-                setBioContent(User.User.bio || "")
-                setLoadingUserData(false)
+                const User = await getUserData(user.id);
+                setUsernameContent(User.User.username || "");
+                setBioContent(User.User.bio || "");
+                setLoadingUserData(false);
             }
             catch {
-                throw "f getuserdatafe"
+                throw "f getuserdatafe";
             }
         }
         
-        getUserDataFE()
-    }, [user])
+        getUserDataFE();
+    }, [user]);
 
     const handleUsernameContent = async () => {
         if (usernameContent.length  <= 0 ) {
-            alert("Enter username")
-            return
+            alert("Enter username");
+            return;
         }
         try{
-            await updateUsername(usernameContent, user?.id || "err")
+            await updateUsername(usernameContent, user?.id || "err");
         }
         catch {
-            throw "f updateusername"
+            throw "f updateusername";
         }
     }
 
     const handleBioContent = async () => {
         if (bioContent.length <= 0) {
-            alert("Enter bio")
-            return
+            alert("Enter bio");
+            return;
         }
         try{
-            await updateBio(bioContent, user?.id || "err")
+            await updateBio(bioContent, user?.id || "err");
         }
         catch {
-            throw "f updatebio"
+            throw "f updatebio";
         }
     }
 
-    if (loadingUserData) return <Loading />
+    if (loadingUserData) return <Loading />;
 
     return(
         <>
@@ -81,7 +78,7 @@ const EditProfileForm = () => {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-export default EditProfileForm
+export default EditProfileForm;

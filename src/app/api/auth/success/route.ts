@@ -1,16 +1,15 @@
 import {PrismaClient} from "@prisma/client";
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server";
 import {NextResponse} from "next/server";
-import { redirect } from "next/navigation";
-
-const prisma = new PrismaClient();
 
 export async function GET() {
+    const prisma = new PrismaClient();
+
     const {getUser} = getKindeServerSession();
     const user = await getUser();
 
     if (!user || user == null || !user.id)
-        throw new Error("something went wrong with authentication" + user);
+        throw new Error("f creating user via prisma" + user);
 
     let dbUser = await prisma.user.findUnique({
         where: {kindeId: user.id}
@@ -22,7 +21,7 @@ export async function GET() {
                 kindeId: user.id,
                 firstName: user.given_name ?? "",
                 lastName: user.family_name ?? "",
-                email: user.email ?? "", // Using nullish coalescing operator to provide a default empty string value
+                email: user.email ?? "",
                 profilepic: user.picture ?? ""
             }
         });
