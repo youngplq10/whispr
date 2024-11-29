@@ -63,7 +63,7 @@ const EditProfileForm = () => {
         <>
             <div className='container-fluid'>
                 <div className='row justify-content-center mt-5'>
-                    <div className='col-6'>
+                    <div className='col-11 col-md-6 col-xl-4'>
                         <div className="mb-3">
                             <label htmlFor="Username_input" className="form-label">Username</label>
                             <input type="text" className="form-control" id="Username_input" value={usernameContent} onChange={(e) => setUsernameContent(e.target.value)} />

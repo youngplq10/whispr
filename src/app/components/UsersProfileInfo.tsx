@@ -7,22 +7,7 @@ import { getUserData, getUserDataByUsername, checkIfIsFollowing, unfollowUser, f
 import Loading from "@/app/components/Loading";
 import { formatDateWithoutHours } from "@/app/server/FormatDate";
 import Image from "next/image";
-
-interface User {
-    id: string;
-    username: string;
-    isUsernameSet: boolean;
-    kindeId: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    bio: string;
-    createdAt: Date;
-    followers: number;
-    following: number;
-    posts: number;
-    profilepic: String;
-}
+import { User } from '../interfaces/interfaces';
 
 const UsersProfileInfo = () => {
     const { user } = useKindeBrowserClient();
@@ -49,8 +34,8 @@ const UsersProfileInfo = () => {
                 const { User } = await getUserData(user.id);
                 setMe(User);
                 setLoadingUsername(false);
-            } catch (error) {
-                console.error("Error in getUserDataFE:", error);
+            } catch {
+                throw "f getmydatafe";
             }
         };
 
@@ -125,7 +110,7 @@ const UsersProfileInfo = () => {
                     <div className="row justify-content-center">
                         <div className="col-11 col-md-8 col-xl-6 px-3 pb-2 border-start border-end">
                             <span>
-                                Dołączył:{" "}
+                                Joined:{" "}
                                 {User?.createdAt
                                     ? formatDateWithoutHours(User.createdAt.toString())
                                     : "N/A"}
@@ -139,8 +124,8 @@ const UsersProfileInfo = () => {
                     </div>
                     <div className="row justify-content-center">
                         <div className="col-11 col-md-8 col-xl-6 border-bottom border-start border-end pb-3">
-                            <span className="fs-6 ms-1">{howManyFollowing} obserwujących</span>
-                            <a className="fs-6 ms-2 text-decoration-none text-dark" href={"/profile/"+User?.username+"/following"}>{howManyFollowers} obserwowanych</a>
+                            <a className="fs-6 ms-2 text-decoration-none text-dark" href={"/profile/"+User?.username+"/followers"}>{howManyFollowing} followers</a>
+                            <a className="fs-6 ms-2 text-decoration-none text-dark" href={"/profile/"+User?.username+"/following"}>{howManyFollowers} following</a>
                             <button className="btn btn-primary ms-2" onClick={() => handleFollowing()}>
                                 {following? "unfollow" : "follow"}
                             </button>

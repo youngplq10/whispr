@@ -2,22 +2,24 @@
 
 import { useParams } from 'next/navigation';
 import React, {  useEffect, useState } from 'react'
-import { getFollowing, getUserDataByUsername } from '@/app/server/actions';
+import { getFollowers,  getUserDataByUsername } from '@/app/server/actions';
 import Loading from '@/app/components/Loading';
 import Image from 'next/image';
-import { User, Following } from '../interfaces/interfaces';
+import { User, Follower } from '../interfaces/interfaces';
 
-const FollowingListing = () => {
+
+const FollowersListing = () => {
     const params = useParams();
     const profileusername = params.profilename;
 
     const [User, setUser] = useState<User | null>(null);
-    const [followingListing, setFollowingListing] = useState<Following[]>([]);
-    const [loadingFollowingListing, setLoadingFollowingListing] = useState(true);
+    const [followerListing, setFollowerListing] = useState<Follower[]>([]);
+    const [loadingFollowerListing, setLoadingFollowerListing] = useState(true);
 
     useEffect(() => {
         const getUserDataFE = async () => {
             const { User } = await getUserDataByUsername(profileusername.toString());
+            console.log(User)
             setUser(User);
         }
 
@@ -27,21 +29,23 @@ const FollowingListing = () => {
     useEffect(() => {
         if (!User) return;
 
-        const getFollowingFE = async () => {
-            const { following } = await getFollowing(User.id);
-            setFollowingListing(following);
-            setLoadingFollowingListing(false);
+        const getFollowersFE = async () => {
+            const { follower } = await getFollowers(User.id);
+            setFollowerListing(follower);
+            setLoadingFollowerListing(false);
         }
 
-        getFollowingFE();
+        getFollowersFE();
     }, [User]);
 
-    if (loadingFollowingListing) return <Loading />;
+    if (loadingFollowerListing) return <Loading />;
+
+    console.log(followerListing)
 
     return(
         <>  
             <div className='container-fluid my-5'>
-                {followingListing.map((follow, index) => {
+                {followerListing.map((follow, index) => {
                     return(
                         <div className='row justify-content-center' key={index}>
                             <div className='col-11 col-md-6 col-xl-4 my-2 border py-4'>
@@ -49,9 +53,9 @@ const FollowingListing = () => {
                                     width={50}
                                     height={50}
                                     alt='prof-pic'
-                                    src={follow.following.profilepic.toString() || "https://lh3.googleusercontent.com/a/ACg8ocIximtuKu7QUkx_E5R9WctexXezRz5DLWX_3KRXJhQ3lebAGTLM=s96-c"}
+                                    src={follow.follower.profilepic.toString() || "https://lh3.googleusercontent.com/a/ACg8ocIximtuKu7QUkx_E5R9WctexXezRz5DLWX_3KRXJhQ3lebAGTLM=s96-c"}
                                 />
-                                <a className='text-decoration-none text-dark ms-2' href={"/profile/"+follow.following.username}>{follow.following.username}</a>
+                                <a className='text-decoration-none text-dark ms-2' href={"/profile/"+follow.follower.username}>{follow.follower.username}</a>
                             </div>
                         </div>
                     )
@@ -61,4 +65,4 @@ const FollowingListing = () => {
     );
 }
 
-export default FollowingListing;
+export default FollowersListing;

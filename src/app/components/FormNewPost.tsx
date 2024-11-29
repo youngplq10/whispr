@@ -5,14 +5,7 @@ import { setNewPost, getAllPosts, getUserData } from '@/app/server/actions';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import Loading from '@/app/components/Loading';
 import { formatDate } from '@/app/server/FormatDate';
-
-interface Post {
-    id: string,
-    content: string,
-    createdAt: Date,
-    userId: string,
-    username: string
-}
+import { Post } from '../interfaces/interfaces';
 
 const FormNewPost = () => {
     const { user } = useKindeBrowserClient();
@@ -55,8 +48,7 @@ const FormNewPost = () => {
             setPosts((prevPosts) => [newPost, ...prevPosts]);
             setContent("");
         } catch (error) {
-            console.error("Error setting username:", error);
-            alert("Failed to set username. Please try again.");
+            alert("Failed to create new post. Please try again.");
         }
     };
 
@@ -87,11 +79,11 @@ const FormNewPost = () => {
                             id='formnewpost' 
                             className='form-control' 
                             value={content}
-                            onChange={(e) => setContent(e.target.value)} // Update state on input change
+                            onChange={(e) => setContent(e.target.value)}
                         /> 
                         <button 
                             className='btn btn-primary py-1 px-3 mt-2' 
-                            onClick={handleSetContent} // Call handler on click
+                            onClick={handleSetContent}
                         >Share</button>            
                     </div>
                 </div>

@@ -81,7 +81,7 @@ const Navbar = () => {
                 </div>
 
                 <div className="d-flex">
-                    <a className="navbar-text me-3 text-white nav-link" href={'/profile/'}>Witaj, {User?.username || "Użytkownik"}!</a>
+                    <a className="navbar-text me-3 text-white nav-link" href={'/profile/'}>Hello, {User?.username || "Użytkownik"}!</a>
                 </div>
             </nav>
         </>

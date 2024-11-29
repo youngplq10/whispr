@@ -6,28 +6,16 @@ import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import React, {useState, useEffect} from 'react';
 import Loading from '@/app/components/Loading';
 import {formatDateWithoutHours} from '@/app/server/FormatDate';
-
-interface User{
-    id: string,
-    username: string,
-    isUsernameSet: boolean,
-    kindeId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    bio: string,
-    createdAt: Date,
-    followers: number,
-    following: number,
-    posts: number,
-    profilepic: String
-}
+import { User } from '../interfaces/interfaces';
 
 const ProfileInfo = () => {
     const { user } = useKindeBrowserClient();
 
     const [User, setUser] = useState<User>();
     const [loadingUser, setLoadingUser] = useState(true);
+
+    const [howManyFollowers, setHowManyFollowers] = useState(0);
+    const [howManyFollowing, setHowManyFollowing] = useState(0);
 
     useEffect(() => {
         if (!user?.id) return;
@@ -37,6 +25,8 @@ const ProfileInfo = () => {
                 const { User } = await getUserData(user.id);
                 if(!User) return;
                 setUser(User);
+                setHowManyFollowers(User.followers || 0)
+                setHowManyFollowing(User.following || 0)
                 setLoadingUser(false);
             } catch (error) {
                 console.error("Failed to fetch user data:", error);
@@ -66,7 +56,7 @@ const ProfileInfo = () => {
                     </div>
                     <div className='row justify-content-center'>
                         <div className='col-11 col-md-8 col-xl-6 px-3 pb-2 border-start border-end'>
-                            <span>Dołaczył: {User?.createdAt ? formatDateWithoutHours(User.createdAt.toString()) : "N/A"}</span>
+                            <span>Joined: {User?.createdAt ? formatDateWithoutHours(User.createdAt.toString()) : "N/A"}</span>
                         </div>
                     </div>
                     <div className='row justify-content-center'>
@@ -76,9 +66,9 @@ const ProfileInfo = () => {
                     </div>
                     <div className='row justify-content-center'>
                         <div className='col-11 col-md-8 col-xl-6 border-bottom border-start border-end pb-3'>
-                            <span className='fs-6 ms-1'>{User?.following} obserwujących</span>
-                            <span className='fs-6 ms-2'>{User?.followers} obserwowanych</span>
-                            <a className='btn btn-outline-primary ms-2' href='/edit/profile'>Edytuj</a>
+                            <a className="fs-6 ms-2 text-decoration-none text-dark" href={"/profile/"+User?.username+"/followers"}>{howManyFollowing} followers</a>
+                            <a className="fs-6 ms-2 text-decoration-none text-dark" href={"/profile/"+User?.username+"/following"}>{howManyFollowers} following</a>
+                            <a className='btn btn-outline-primary ms-2' href='/edit/profile'>Edit</a>
                         </div>
                     </div>
                 </div>

@@ -262,3 +262,26 @@ export async function getFollowing(userId: string){
         following: following
     }
 }
+
+export async function getFollowers(userId: string){
+
+    const follower= await prisma.follower.findMany({
+        where: {
+            followingId: userId
+        },
+        select: {
+            follower: {
+              select: {
+                id: true,
+                username: true,
+                profilepic: true,
+                bio: true,
+            },
+        },
+    }
+    })
+
+    return {
+        follower: follower
+    }
+}
