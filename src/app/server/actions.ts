@@ -247,7 +247,7 @@ export async function getFollowing(userId: string){
             followerId: userId
         },
         select: {
-            follower: {
+            following: {
               select: {
                 id: true,
                 username: true,

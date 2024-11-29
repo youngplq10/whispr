@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import React, {  useEffect, useState } from 'react'
 import { getFollowing, getUserDataByUsername } from '@/app/server/actions';
 import Loading from '@/app/components/Loading';
+import Image from 'next/image';
 
 interface User {
     id: string,
@@ -22,10 +23,12 @@ interface User {
 }
 
 interface Following {
-    id: string,
-    username: string,
-    profilepic: string,
-    bio: string,
+    following: {
+        id: string,
+        username: string,
+        profilepic: string,
+        bio: string,
+    }
 }
 
 const FollowingListing = () => {
@@ -62,14 +65,18 @@ const FollowingListing = () => {
 
     return(
         <>  
-            <div className='container-fluid'>
+            <div className='container-fluid my-5'>
                 {followingListing.map((follow, index) => {
                     return(
-                        <div className='row' key={index}>
-                            <div className='col-12'>
-                                <span>
-                                    {follow.username}
-                                </span>
+                        <div className='row justify-content-center' key={index}>
+                            <div className='col-11 col-md-6 col-xl-4 my-2 border py-4'>
+                                <Image 
+                                    width={50}
+                                    height={50}
+                                    alt='prof-pic'
+                                    src={follow.following.profilepic}
+                                />
+                                <a className='text-decoration-none text-dark ms-2' href={"/profile/"+follow.following.username}>{follow.following.username}</a>
                             </div>
                         </div>
                     )
