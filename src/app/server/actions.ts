@@ -31,9 +31,11 @@ export async function setNewPost(contentt: string, userid: string, usernamee: st
     })
 }
 
-export async function getAllPosts(){
+export async function getAllPosts(skip: number, take: number){
 
     const Posts = await prisma.post.findMany({
+        skip,
+        take,
         orderBy: {
             createdAt: 'desc'
         }

@@ -13,6 +13,11 @@ const FormNewPost = () => {
     const [User, setUser] = useState("a");
     const [loadingUser, setLoadingUser] = useState(true);
 
+    const [skip, setSkip] = useState(0)
+    const [take, setTake] = useState(10)
+
+    const [reachedBottom, setReachedBottom] = useState(false)
+
     useEffect(() => {
         if (!user?.id) return;
     
@@ -56,13 +61,44 @@ const FormNewPost = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const getAllPostsFE = async () => {
-            const {AllPosts} = await getAllPosts();
-            setPosts(AllPosts);
-            setLoading(false);
+        if(loading) {
+            const getAllPostsFE = async () => {
+                const {AllPosts} = await getAllPosts(skip, take);
+                setPosts(AllPosts);
+                setLoading(false);
+            }
+            getAllPostsFE();
         }
-        getAllPostsFE();
-    }, []);
+
+        if(reachedBottom===true) {
+            const getAllPostsFE = async () => {
+                console.log("took: "+ take)
+                const {AllPosts} = await getAllPosts(skip, take);
+                setReachedBottom(false);
+                setPosts(AllPosts);
+            }
+            getAllPostsFE();
+        }
+    }, [reachedBottom]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollTop = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const fullHeight = document.documentElement.scrollHeight;
+
+            if (scrollTop + viewportHeight >= fullHeight - 5 && reachedBottom===false) {
+                setTake((prev) => prev+10)
+                setReachedBottom(true);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [reachedBottom]);
 
     if(loadingUser) return <Loading />;
 
