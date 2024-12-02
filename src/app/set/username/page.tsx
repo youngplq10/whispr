@@ -5,7 +5,7 @@ import FormSetUsername from '@/app/components/FormSetUsername';
 import checkIfIsLoggedOrHasUsername from "@/app/server/checkIfIsLoggedOrHasUsername";
 
 const page = async () => {
-    checkIfIsLoggedOrHasUsername()
+    await checkIfIsLoggedOrHasUsername()
 
     return(
         <>

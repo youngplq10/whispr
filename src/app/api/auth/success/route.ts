@@ -1,6 +1,6 @@
 import {PrismaClient} from "@prisma/client";
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server";
-import {NextResponse} from "next/server";
+import { redirect } from "next/navigation";
 
 export async function GET() {
     const prisma = new PrismaClient();
@@ -27,5 +27,5 @@ export async function GET() {
         });
     }
 
-    return NextResponse.redirect(user.picture ?? "huj");
+    redirect("/dashboard")
 }

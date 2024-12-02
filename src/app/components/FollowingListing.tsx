@@ -49,6 +49,7 @@ const FollowingListing = () => {
                                     width={50}
                                     height={50}
                                     alt='prof-pic'
+                                    className='rounded'
                                     src={follow.following.profilepic.toString() || "https://lh3.googleusercontent.com/a/ACg8ocIximtuKu7QUkx_E5R9WctexXezRz5DLWX_3KRXJhQ3lebAGTLM=s96-c"}
                                 />
                                 <a className='text-decoration-none text-dark ms-2' href={"/profile/"+follow.following.username}>{follow.following.username}</a>

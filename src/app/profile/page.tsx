@@ -7,7 +7,7 @@ import PostsOwnProfile from '@/app/components/PostsOwnProfile';
 import checkIfIsLoggedOrHasUsername from "@/app/server/checkIfIsLoggedOrHasUsername";
 
 const page = async () => {
-    checkIfIsLoggedOrHasUsername()
+    await checkIfIsLoggedOrHasUsername()
 
     return(
         <>

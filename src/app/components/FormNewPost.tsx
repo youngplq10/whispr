@@ -128,7 +128,7 @@ const FormNewPost = () => {
                 {Posts.map((post, index) => {
                     return(
                         <div key={index}>
-                            <div className='row justify-content-center mt-5'>
+                            <div className='row justify-content-center mt-5 mb-5'>
                                 <div className='col-11 col-md-8 col-xl-6 justify-content-center border py-2'>
                                     <div className='d-flex justify-content-between'>
                                         <a className='h6 fw-bold text-decoration-none' href={"/profile/"+post.username}>{post.username}</a>

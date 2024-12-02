@@ -6,7 +6,7 @@ import React from 'react';
 import checkIfIsLoggedOrHasUsername from "@/app/server/checkIfIsLoggedOrHasUsername";
 
 const page = async () => {
-    checkIfIsLoggedOrHasUsername()
+    await checkIfIsLoggedOrHasUsername()
 
     return(
         <>
